@@ -6,63 +6,56 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-    @override
+  @override
   Widget build(BuildContext context) {
+    runDartLab();
+
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-                                                                                                                                colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Пибд-33')),
+        body: const Center(child: Text('Лабораторная 2 выполнена!\n(Смотри вывод в консоли)')),
       ),
-      home: const MyHomePage(title: 'Пибд-33 Кочетков Д.К.'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
 
-      
-        
-  final String title;
+enum FruitType {
+  apple,
+  banana,
+  orange }
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
+extension FormatNum on double {
+  String toPrice() => '${toStringAsFixed(1)} руб.';
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class Fruit {
+  final String name;
+  final double price;
+  final FruitType type;
 
-  void _incrementCounter() {
-    setState(() {
-                                    _counter++;
-    });
-  }
+  Fruit(this.name, this.price, this.type);
 
   @override
-  Widget build(BuildContext context) {
-                            return Scaffold(
-      appBar: AppBar(
-                                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                        title: Text(widget.title),
-      ),
-      body: Center(
-                        child: Column(
-                                                                                                                                            mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
+  String toString() => '$name ($type) - ${price.toPrice()}';
+}
+
+void runDartLab() async {
+  List<Fruit> basket = [
+    Fruit('Яблоко', 50.5, FruitType.apple),
+    Fruit('Банан', 30.0, FruitType.banana),
+    Fruit('Апельсин', 70.0, FruitType.orange),
+  ];
+
+  print('--- Список фруктов ---');
+  for (var fruit in basket) {
+    print(fruit);
   }
+
+  basket.sort((a, b) => a.price.compareTo(b.price));
+  print('\n--- Самый дешевый: ${basket.first.name} ---');
+
+  print('\nЗагрузка данных...');
+  await Future.delayed(const Duration(seconds: 1));
+  print('Данные успешно загружены!');
 }
